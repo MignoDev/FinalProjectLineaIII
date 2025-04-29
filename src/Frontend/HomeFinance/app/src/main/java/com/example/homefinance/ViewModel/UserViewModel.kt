@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.homefinance.Model.User
+import com.example.homefinance.Model.UserRequest
 import com.example.homefinance.Repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,7 +40,7 @@ class UserViewModel : ViewModel() {
     }
 
     //crear registro
-    fun createUser(input: User) {
+    fun createUser(input: UserRequest) {
         viewModelScope.launch {
             repository.create(input)
             listUsers()
@@ -47,7 +48,7 @@ class UserViewModel : ViewModel() {
     }
 
     //actualizar registro
-    fun updateUser(id: Long, input: User) {
+    fun updateUser(id: Long, input: UserRequest) {
         viewModelScope.launch {
             repository.update(id, input)
             listUsers()

@@ -6,3 +6,9 @@ data class User(
     val password: String,
     val nickName: String
 )
+
+data class UserRequest(
+    val userName: String,
+    val password: String,
+    val nickName: String
+)

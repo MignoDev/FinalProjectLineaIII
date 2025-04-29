@@ -2,6 +2,7 @@ package com.example.homefinance.Repository
 
 import com.example.homefinance.Interfaces.RetrofitClient
 import com.example.homefinance.Model.User
+import com.example.homefinance.Model.UserRequest
 
 class UserRepository {
 
@@ -13,11 +14,11 @@ class UserRepository {
         return RetrofitClient.apiService.findUser(id)
     }
 
-    suspend fun create(input: User) {
+    suspend fun create(input: UserRequest) {
         return RetrofitClient.apiService.createUser(input)
     }
 
-    suspend fun update(id: Long, input: User) {
+    suspend fun update(id: Long, input: UserRequest) {
         return RetrofitClient.apiService.updateUser(id, input)
     }
 

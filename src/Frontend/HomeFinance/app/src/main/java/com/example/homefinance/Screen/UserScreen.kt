@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.homefinance.Model.User
+import com.example.homefinance.Model.UserRequest
 import com.example.homefinance.ViewModel.UserViewModel
 import kotlinx.coroutines.launch
 
@@ -127,7 +128,7 @@ fun UserScreen(viewModel: UserViewModel = viewModel()) {
             onClick = {
                 if (userName.isNotEmpty() && password.isNotEmpty()) {
                     scope.launch {
-                        val nuevoUsuario = User(id = 1, userName = userName, password = password, nickName = if(nickName.isEmpty()) userName else nickName)
+                        val nuevoUsuario = UserRequest(userName = userName, password = password, nickName = if(nickName.isEmpty()) userName else nickName)
                         viewModel.createUser(nuevoUsuario)
                         userName = ""
                         password = ""

@@ -4,6 +4,7 @@ import com.example.HomeFinances.Models.EarnInvestment;
 import com.example.HomeFinances.Models.User;
 import com.example.HomeFinances.Repositories.EarnInvestmentRepository;
 import com.example.HomeFinances.Repositories.UserRepository;
+import com.example.HomeFinances.Utils.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,8 @@ public class UserService {
 
     @Autowired
     public UserRepository repo;
+
+
 
     //region get service
     public List<User> list ()
@@ -30,7 +33,12 @@ public class UserService {
     //region post service
     public void create (User input)
     {
-        repo.save(input);
+        String hashedPassword = PasswordUtils.hashPassword(input.getPassword());
+        User user = new User();
+        user.setUserName(input.getUserName());
+        user.setPassword(hashedPassword);
+        user.setNickName(input.getNickName());
+        repo.save(user);
     }
     //endregion
 
@@ -41,7 +49,12 @@ public class UserService {
         {
             throw new RuntimeException("Registro con el id " + id + " No existe");
         }
-        repo.save(input);
+        String hashedPassword = PasswordUtils.hashPassword(input.getPassword());
+        User user = new User();
+        user.setUserName(input.getUserName());
+        user.setPassword(hashedPassword);
+        user.setNickName(input.getNickName());
+        repo.save(user);
     }
     //endregion
 

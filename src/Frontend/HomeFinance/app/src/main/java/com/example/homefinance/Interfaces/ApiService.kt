@@ -12,6 +12,7 @@ import com.example.homefinance.Model.PlannedExpenseDetail
 import com.example.homefinance.Model.TypeExpense
 import com.example.homefinance.Model.TypeIncome
 import com.example.homefinance.Model.User
+import com.example.homefinance.Model.UserRequest
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
@@ -240,10 +241,10 @@ interface ApiService {
     suspend fun findUser(@Path("id") id: Long): User
 
     @POST("user/")
-    suspend fun createUser(@Body input: User)
+    suspend fun createUser(@Body input: UserRequest)
 
     @PUT("user/{id}")
-    suspend fun updateUser(@Path("id") id: Long, @Body input: User)
+    suspend fun updateUser(@Path("id") id: Long, @Body input: UserRequest)
 
     @DELETE("user/{id}")
     suspend fun deleteUser(@Path("id") id: Long)
