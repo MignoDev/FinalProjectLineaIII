@@ -22,10 +22,10 @@ public class Income {
     private double amount;
 
     @Column(name = "home_id")
-    private long home_id;
+    private long homeId;
 
     @Column(name = "type_id")
-    private long typeIncome_id;
+    private long typeIncomeId;
 
     @ManyToOne
     @JoinColumn(name = "home_id", insertable = false, updatable = false)
@@ -67,20 +67,20 @@ public class Income {
         this.amount = amount;
     }
 
-    public long getHome_id() {
-        return home_id;
+    public long getHomeId() {
+        return homeId;
     }
 
-    public void setHome_id(long home_id) {
-        this.home_id = home_id;
+    public void setHomeId(long homeId) {
+        this.homeId = homeId;
     }
 
-    public long getTypeIncome_id() {
-        return typeIncome_id;
+    public long getTypeIncomeId() {
+        return typeIncomeId;
     }
 
-    public void setTypeIncome_id(long typeIncome_id) {
-        this.typeIncome_id = typeIncome_id;
+    public void setTypeIncomeId(long typeIncomeId) {
+        this.typeIncomeId = typeIncomeId;
     }
 
     public Home getHome() {

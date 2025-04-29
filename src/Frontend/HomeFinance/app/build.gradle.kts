@@ -32,7 +32,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -74,6 +74,8 @@ dependencies {
 
     implementation(libs.androidx.runtime.livedata)
 
+    //navigation
+    implementation(libs.navigation.compose)
 
     // Testing
     testImplementation(libs.junit)
