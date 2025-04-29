@@ -77,6 +77,9 @@ dependencies {
     //navigation
     implementation(libs.navigation.compose)
 
+    //icons
+    implementation(libs.material.icons.extended)
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -1,5 +1,6 @@
 package com.example.homefinance.ViewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,7 +17,7 @@ class UserViewModel : ViewModel() {
 
     //variable para gestionar los datos
     private val _user = MutableLiveData<List<User>?>(emptyList())
-    val user: MutableLiveData<List<User>?> = _user
+    val user: LiveData<List<User>?> = _user
 
     //obtener todos los datos
     fun listUsers() {
