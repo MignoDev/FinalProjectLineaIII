@@ -1,6 +1,7 @@
 package com.example.HomeFinances.Services;
 
 import com.example.HomeFinances.Models.EarnInvestment;
+import com.example.HomeFinances.Models.LoginRequest;
 import com.example.HomeFinances.Models.User;
 import com.example.HomeFinances.Repositories.EarnInvestmentRepository;
 import com.example.HomeFinances.Repositories.UserRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -66,6 +68,16 @@ public class UserService {
             throw new RuntimeException("Registro con el id " + id + " No existe");
         }
         repo.deleteById(id);
+    }
+
+    public boolean login (LoginRequest input)
+    {
+        Optional<User> userOpt = repo.findByUserName(input.getUserName());
+        if (userOpt.isPresent())
+        {
+            return PasswordUtils.verifyPassword(input.getPassword(), userOpt.get().getPassword());
+        }
+        return false;
     }
     //endregion
 }

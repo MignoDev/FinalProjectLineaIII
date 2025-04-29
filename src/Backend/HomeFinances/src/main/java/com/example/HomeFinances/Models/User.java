@@ -67,4 +67,7 @@ public class User {
     public void setHomeUsers(List<HomeUser> homeUsers) {
         HomeUsers = homeUsers;
     }
+
 }
+
+

@@ -1,6 +1,7 @@
 package com.example.HomeFinances.Controllers;
 
 import com.example.HomeFinances.Models.ActualExpense;
+import com.example.HomeFinances.Models.LoginRequest;
 import com.example.HomeFinances.Models.User;
 import com.example.HomeFinances.Services.ActualExpenseService;
 import com.example.HomeFinances.Services.UserService;
@@ -59,6 +60,18 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest input)
+    {
+        try {
+            boolean response = service.login(input);
+            return ResponseEntity.ok(response);
+        } catch (Exception e)
+        {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
         }
     }

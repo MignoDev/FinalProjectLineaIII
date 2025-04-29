@@ -7,6 +7,7 @@ import com.example.homefinance.Model.Home
 import com.example.homefinance.Model.HomeUser
 import com.example.homefinance.Model.Income
 import com.example.homefinance.Model.Investment
+import com.example.homefinance.Model.LoginRequest
 import com.example.homefinance.Model.PlannedExpense
 import com.example.homefinance.Model.PlannedExpenseDetail
 import com.example.homefinance.Model.TypeExpense
@@ -243,11 +244,15 @@ interface ApiService {
     @POST("user/")
     suspend fun createUser(@Body input: UserRequest)
 
+    @POST("user/login")
+    suspend fun login(@Body input: LoginRequest)
+
     @PUT("user/{id}")
     suspend fun updateUser(@Path("id") id: Long, @Body input: UserRequest)
 
     @DELETE("user/{id}")
     suspend fun deleteUser(@Path("id") id: Long)
+
 
     //endregion
 }

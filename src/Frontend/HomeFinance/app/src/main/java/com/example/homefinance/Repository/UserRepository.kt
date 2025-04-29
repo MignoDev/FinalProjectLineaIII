@@ -1,6 +1,7 @@
 package com.example.homefinance.Repository
 
 import com.example.homefinance.Interfaces.RetrofitClient
+import com.example.homefinance.Model.LoginRequest
 import com.example.homefinance.Model.User
 import com.example.homefinance.Model.UserRequest
 
@@ -16,6 +17,10 @@ class UserRepository {
 
     suspend fun create(input: UserRequest) {
         return RetrofitClient.apiService.createUser(input)
+    }
+
+    suspend fun login(input: LoginRequest) {
+        return RetrofitClient.apiService.login(input)
     }
 
     suspend fun update(id: Long, input: UserRequest) {

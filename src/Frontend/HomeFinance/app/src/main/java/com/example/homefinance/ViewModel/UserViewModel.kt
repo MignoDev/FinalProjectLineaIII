@@ -1,9 +1,15 @@
 package com.example.homefinance.ViewModel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.homefinance.Model.LoginRequest
 import com.example.homefinance.Model.User
 import com.example.homefinance.Model.UserRequest
 import com.example.homefinance.Repository.UserRepository
@@ -19,6 +25,7 @@ class UserViewModel : ViewModel() {
     //variable para gestionar los datos
     private val _user = MutableLiveData<List<User>?>(emptyList())
     val user: LiveData<List<User>?> = _user
+
 
     //obtener todos los datos
     fun listUsers() {
@@ -44,6 +51,13 @@ class UserViewModel : ViewModel() {
         viewModelScope.launch {
             repository.create(input)
             listUsers()
+        }
+    }
+
+    //inciar sesión
+    fun login(input: LoginRequest) {
+        viewModelScope.launch {
+            repository.login(input)
         }
     }
 
