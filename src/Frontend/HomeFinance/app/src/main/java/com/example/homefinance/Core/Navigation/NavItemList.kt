@@ -2,6 +2,8 @@ package com.example.homefinance.Core.Navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalanceWallet
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Analytics
 import androidx.compose.material.icons.filled.Assessment
 import androidx.compose.material.icons.filled.CurrencyExchange
@@ -15,8 +17,8 @@ object NavItemList {
 
     val navItemList = listOf(
         NavItem("Resumen", Icons.Default.Analytics),
-        NavItem("Movimientos", Icons.Default.CurrencyExchange),
-        NavItem("Hogares", Icons.Default.HomeWork),
+        NavItem("Transacciones", Icons.Default.CurrencyExchange),
+        NavItem("", Icons.Default.AddCircle),
         NavItem("Inversiones", Icons.Default.DataThresholding),
         NavItem("Perfil", Icons.Default.Person)
     )

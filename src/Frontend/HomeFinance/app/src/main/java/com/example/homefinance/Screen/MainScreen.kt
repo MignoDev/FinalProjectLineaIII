@@ -53,7 +53,7 @@ fun MainScreen(navigateToSettings: () -> Unit) {
 fun ContentScreen(selectedIndex: Int) {
     when(selectedIndex) {
         0 -> ResumeScreen()
-        1 -> MovementScreen()
+        1 -> UserScreen()
         2 -> HomeScreen()
         3 -> InvestmentScreen()
         4 -> ProfileScreen()
