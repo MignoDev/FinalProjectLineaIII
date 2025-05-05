@@ -26,7 +26,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    private List<HomeUser> HomeUsers;
+    private List<HomeUser> homeUsers;
 
     public long getId() {
         return id;
@@ -61,13 +61,12 @@ public class User {
     }
 
     public List<HomeUser> getHomeUsers() {
-        return HomeUsers;
+        return homeUsers;
     }
 
     public void setHomeUsers(List<HomeUser> homeUsers) {
-        HomeUsers = homeUsers;
+        this.homeUsers = homeUsers;
     }
-
 }
 
 
