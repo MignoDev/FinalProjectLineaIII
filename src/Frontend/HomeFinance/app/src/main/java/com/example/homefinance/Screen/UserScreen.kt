@@ -40,6 +40,9 @@ import kotlinx.coroutines.launch
 @Preview(showBackground = true)
 @Composable
 fun UserScreen(viewModel: UserViewModel = viewModel()) {
+    /*
+    Clase de prueba de conexión con backend, prueba de Get, Post, Put, Delete
+     */
     val users by viewModel.user.observeAsState(emptyList())
     var searchValue by remember { mutableStateOf("") }
     var userName by remember { mutableStateOf("") }
