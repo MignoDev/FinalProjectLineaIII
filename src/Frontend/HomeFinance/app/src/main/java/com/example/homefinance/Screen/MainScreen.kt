@@ -2,11 +2,17 @@ package com.example.homefinance.Screen
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Icon
+import android.provider.CalendarContract
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.*
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -38,17 +44,7 @@ fun MainScreen(navigateToSettings: () -> Unit) {
             )
         }
     ) {
-        Column (modifier = Modifier.fillMaxSize()) {
-            Row (modifier = Modifier.align(Alignment.End)) {
-                IconButton(
-                    onClick = navigateToSettings,
-                ) {
-                    Icons.Filled.Settings
-                }
-            }
-            ContentScreen(selectedIndex)
-        }
-
+        ContentScreen(selectedIndex)
     }
 }
 
