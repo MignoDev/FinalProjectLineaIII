@@ -1,9 +1,11 @@
 package com.example.homefinance.Screen
 
 import android.widget.Toast
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,11 +13,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -59,19 +60,27 @@ fun UserScreen(viewModel: UserViewModel = viewModel()) {
     //Estado para controlar la muestra de errores
     var formSubmitted by remember { mutableStateOf(false)}
 
+    val usuariosFiltrados: List<User> = users?.filter {
+        it.userName.toString().contains(searchValue, ignoreCase = true) ||
+                it.nickName.toString().contains(searchValue, ignoreCase = true)
+    } ?: emptyList()
+
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+
 
     LaunchedEffect(true) {
         viewModel.listUsers()
     }
 
-    val usuariosFiltrados = users?.filter {
-        it.userName.toString().contains(searchValue, ignoreCase = true) ||
-        it.nickName.toString().contains(searchValue, ignoreCase = true)
-    } ?: emptyList()
 
-    Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+
+    Column (
+        modifier = Modifier.fillMaxSize()
+            .padding(bottom = 103.dp, top = 40.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+
+    ) {
         Text(text = "Lista de usuarios", style = MaterialTheme.typography.headlineSmall)
 
         TextField(
@@ -179,6 +188,7 @@ fun UserScreen(viewModel: UserViewModel = viewModel()) {
         } else {
             LazyColumn(
                 modifier = Modifier.fillMaxWidth()
+                    .fillMaxHeight()
             ) {
                 items(usuariosFiltrados) { usuario ->
                     Card(
