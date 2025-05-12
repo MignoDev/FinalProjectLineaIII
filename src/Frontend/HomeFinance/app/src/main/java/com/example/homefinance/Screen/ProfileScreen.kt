@@ -1,3 +1,8 @@
 package com.example.homefinance.Screen
 
-fun ProfileScreen () {}
+import androidx.compose.runtime.Composable
+
+@Composable
+fun ProfileScreen () {
+
+}

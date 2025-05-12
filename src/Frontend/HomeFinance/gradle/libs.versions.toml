@@ -18,6 +18,7 @@ runtimeLivedata = "1.7.8"
 navigationCompose = "2.8.9"
 kotlinSerialization = "1.8.0"
 icons = "1.6.8"
+ycharts = "2.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,7 +47,7 @@ androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtim
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose"}
 kotlinx-serialization-json-jvm = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm", version.ref = "kotlinSerialization"}
 material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "icons"}
-
+ycharts = { group = "co.yml", name = "ycharts", version.ref = "ycharts"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

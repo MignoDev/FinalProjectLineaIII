@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.homefinance"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -81,6 +81,9 @@ dependencies {
 
     //icons
     implementation(libs.material.icons.extended)
+
+    //charts
+    implementation(libs.ycharts)
 
     // Testing
     testImplementation(libs.junit)
