@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun DropdownComponent(options: List<String>)
 {
-    var selectedOptionText by remember { mutableStateOf("") }
+    var selectedOptionText by remember { mutableStateOf(options[0]) }
     var expanded by remember { mutableStateOf(false) }
     Box(
 
