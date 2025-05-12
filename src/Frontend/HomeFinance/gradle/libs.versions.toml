@@ -49,6 +49,7 @@ kotlinx-serialization-json-jvm = { module = "org.jetbrains.kotlinx:kotlinx-seria
 material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "icons"}
 ycharts = { group = "co.yml", name = "ycharts", version.ref = "ycharts"}
 
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
