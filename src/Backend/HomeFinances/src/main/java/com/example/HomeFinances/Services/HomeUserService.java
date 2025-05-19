@@ -25,6 +25,10 @@ public class HomeUserService {
     {
         return repo.getReferenceById(id);
     }
+
+    public HomeUser findByUserId(long userId) {
+        return repo.findByUserId(userId);
+    }
     //endregion
 
     //region post service

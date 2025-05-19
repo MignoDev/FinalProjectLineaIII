@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.homefinance.Model.EarnInvestment
 import com.example.homefinance.Model.HomeUser
+import com.example.homefinance.Model.HomeUserCreate
 import com.example.homefinance.Repository.HomeUserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,6 +19,12 @@ class HomeUserViewModel : ViewModel() {
     //variable para gestionar los datos
     private val _homeUser = MutableLiveData<List<HomeUser>?>(emptyList())
     val homeUser: MutableLiveData<List<HomeUser>?> = _homeUser
+
+    private val _homeUserUnique = MutableLiveData<HomeUser>(null)
+    val homeUserUnique: MutableLiveData<HomeUser> = _homeUserUnique
+
+    private val _homeUserCreate = MutableLiveData<HomeUser>(null)
+    val homeUserCreate = MutableLiveData<HomeUser>(null)
 
     //obtener todos los datos
     fun listHomeUsers() {
@@ -38,11 +45,20 @@ class HomeUserViewModel : ViewModel() {
         }
     }
 
+    //Obtener dato por id del usuario
+    fun findHomeUserByUserId(userId: Long) {
+        viewModelScope.launch {
+            val homeUser = withContext (Dispatchers.IO) {
+                repository.findByUserID(userId)
+            }
+            _homeUserUnique.postValue(homeUser)
+        }
+    }
+
     //crear registro
-    fun createHomeUser(input: HomeUser) {
+    fun createHomeUser(input: HomeUserCreate) {
         viewModelScope.launch {
             repository.create(input)
-            listHomeUsers()
         }
     }
 
@@ -50,7 +66,6 @@ class HomeUserViewModel : ViewModel() {
     fun updateHomeUser(id: Long, input: HomeUser) {
         viewModelScope.launch {
             repository.update(id, input)
-            listHomeUsers()
         }
     }
 
@@ -58,7 +73,6 @@ class HomeUserViewModel : ViewModel() {
     fun deleteHomeUser(id: Long) {
         viewModelScope.launch {
             repository.delete(id)
-            listHomeUsers()
         }
     }
     

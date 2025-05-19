@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -37,10 +38,25 @@ public class UserController {
     public ResponseEntity<?> find(@PathVariable long id)
     {
         try {
-            User response = service.findById(id);
-            if (response == null)
+            Optional<User> response = service.findById(id);
+            if (response.isEmpty())
             {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado el registro con el id " + id);
+            }
+            return ResponseEntity.ok(response.get());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/user/{userName}")
+    public ResponseEntity<?> findUserName(@PathVariable String userName)
+    {
+        try {
+            User response = service.findByUserName(userName);
+            if (response == null)
+            {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado el registro con el nombre " + userName);
             }
             return ResponseEntity.ok(response);
         } catch (Exception e) {

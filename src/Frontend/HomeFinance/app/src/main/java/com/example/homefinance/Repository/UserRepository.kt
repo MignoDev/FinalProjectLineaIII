@@ -15,11 +15,15 @@ class UserRepository {
         return RetrofitClient.apiService.findUser(id)
     }
 
+    suspend fun findUserName(userName: String): User {
+        return RetrofitClient.apiService.findUserName(userName)
+    }
+
     suspend fun create(input: UserRequest) {
         return RetrofitClient.apiService.createUser(input)
     }
 
-    suspend fun login(input: LoginRequest) {
+    suspend fun login(input: LoginRequest): Boolean {
         return RetrofitClient.apiService.login(input)
     }
 

@@ -46,6 +46,23 @@ public class HomeUserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
         }
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> findByUserId(@PathVariable long userId)
+    {
+        try {
+            HomeUser response = service.findByUserId(userId);
+
+            if (response == null)
+            {
+                return ResponseEntity.ok(new HomeUser());
+            }
+            return ResponseEntity.ok(response);
+        } catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
+        }
+    }
     //endregion
 
     //region post controller

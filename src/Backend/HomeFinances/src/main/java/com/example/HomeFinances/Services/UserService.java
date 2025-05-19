@@ -26,9 +26,18 @@ public class UserService {
         return repo.findAll();
     }
 
-    public User findById(long id)
+    public Optional<User> findById(long id)
     {
-        return repo.getReferenceById(id);
+        return repo.findById(id);
+    }
+
+    public User findByUserName(String user) {
+        Optional<User> userOpt = repo.findByUserName(user);
+        if (userOpt.isPresent())
+        {
+            return userOpt.get();
+        }
+        return null;
     }
     //endregion
 
@@ -72,12 +81,13 @@ public class UserService {
 
     public boolean login (LoginRequest input)
     {
+        boolean authorization = false;
         Optional<User> userOpt = repo.findByUserName(input.getUserName());
         if (userOpt.isPresent())
         {
-            return PasswordUtils.verifyPassword(input.getPassword(), userOpt.get().getPassword());
+            authorization = PasswordUtils.verifyPassword(input.getPassword(), userOpt.get().getPassword());
         }
-        return false;
+        return authorization;
     }
     //endregion
 }

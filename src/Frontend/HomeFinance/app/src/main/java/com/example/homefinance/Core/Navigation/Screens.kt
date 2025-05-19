@@ -6,4 +6,7 @@ import kotlinx.serialization.Serializable
 object Login
 
 @Serializable
-object Main
+data class Main(val userLoggedIn: Long)
+
+@Serializable
+object CreateProfile

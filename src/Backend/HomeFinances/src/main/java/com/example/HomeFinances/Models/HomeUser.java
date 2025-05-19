@@ -23,10 +23,12 @@ public class HomeUser {
 
     @ManyToOne
     @JoinColumn(name = "home_id", insertable = false, updatable = false)
+    @JsonIgnore
     private Home home;
 
     @ManyToOne
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JsonIgnore
     private User user;
 
     public long getId() {

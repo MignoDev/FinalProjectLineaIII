@@ -46,6 +46,21 @@ public class PlannedExpenseController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
         }
     }
+
+    @GetMapping("home/{id}")
+    public ResponseEntity<?> find(@PathVariable long id)
+    {
+        try {
+            List<PlannedExpense> response = service.findByHomeId(id);
+            if (response == null)
+            {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado el registro con el id " + id);
+            }
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
+        }
+    }
     //endregion
 
     //region post controller
@@ -53,8 +68,8 @@ public class PlannedExpenseController {
     @PostMapping("/")
     public ResponseEntity<?> create(@RequestBody PlannedExpense input){
         try {
-            service.create(input);
-            return ResponseEntity.ok().build();
+            PlannedExpense response = service.create(input);
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

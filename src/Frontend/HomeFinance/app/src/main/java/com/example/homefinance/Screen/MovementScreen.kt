@@ -1,3 +1,8 @@
 package com.example.homefinance.Screen
 
-fun MovementScreen () {}
+import androidx.compose.runtime.Composable
+
+@Composable
+fun MovementScreen (userName: String) {
+
+}

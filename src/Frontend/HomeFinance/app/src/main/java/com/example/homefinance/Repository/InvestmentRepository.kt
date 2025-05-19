@@ -2,6 +2,7 @@ package com.example.homefinance.Repository
 
 import com.example.homefinance.Interfaces.RetrofitClient
 import com.example.homefinance.Model.Investment
+import com.example.homefinance.Model.InvestmentCreate
 
 class InvestmentRepository {
 
@@ -13,7 +14,7 @@ class InvestmentRepository {
         return RetrofitClient.apiService.findInvestment(id)
     }
 
-    suspend fun create(input: Investment) {
+    suspend fun create(input: InvestmentCreate) {
         return RetrofitClient.apiService.createInvestment(input)
     }
 

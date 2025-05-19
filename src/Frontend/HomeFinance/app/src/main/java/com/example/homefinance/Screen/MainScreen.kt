@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -16,8 +17,9 @@ import com.example.homefinance.Core.Navigation.NavItemList
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(navigateToSettings: () -> Unit) {
+fun MainScreen(navigateToLogin: () -> Unit, userLoggedIn: Long) {
     var selectedIndex by remember { mutableIntStateOf(0) }
+    val userLoggedIn = userLoggedIn
 
     Scaffold (
         modifier = Modifier.fillMaxSize(),
@@ -30,18 +32,18 @@ fun MainScreen(navigateToSettings: () -> Unit) {
             )
         }
     ) {
-        ContentScreen(selectedIndex)
+        ContentScreen(selectedIndex, userLoggedIn)
     }
 }
 
 
 @Composable
-fun ContentScreen(selectedIndex: Int) {
+fun ContentScreen(selectedIndex: Int, user: Long) {
     when(selectedIndex) {
-        0 -> ResumeScreen()
-        1 -> UserScreen()
-        2 -> HomeScreen()
-        3 -> InvestmentScreen()
-        4 -> ProfileScreen()
+        0 -> ResumeScreen(user)
+        //1 -> UserScreen(userLogged = user)
+        1 -> HomeScreen(user)
+        //3 -> InvestmentScreen(user)
+        2 -> ProfileScreen(user)
     }
 }

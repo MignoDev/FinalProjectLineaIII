@@ -2,6 +2,7 @@ package com.example.homefinance.Repository
 
 import com.example.homefinance.Interfaces.RetrofitClient
 import com.example.homefinance.Model.PlannedExpenseDetail
+import com.example.homefinance.Model.PlannedExpenseDetailCreate
 
 class PlannedExpenseDetailRepository {
 
@@ -13,7 +14,7 @@ class PlannedExpenseDetailRepository {
         return RetrofitClient.apiService.findPlannedExpenseDetail(id)
     }
 
-    suspend fun create(input: PlannedExpenseDetail) {
+    suspend fun create(input: PlannedExpenseDetailCreate) {
         return RetrofitClient.apiService.createPlannedExpenseDetail(input)
     }
 

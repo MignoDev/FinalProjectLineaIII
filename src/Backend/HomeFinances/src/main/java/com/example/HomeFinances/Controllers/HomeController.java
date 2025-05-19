@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/home")
@@ -36,16 +37,17 @@ public class HomeController {
     public ResponseEntity<?> find(@PathVariable long id)
     {
         try {
-            Home response = service.findById(id);
-            if (response == null)
+            Optional<Home> response = service.findById(id);
+            if (response.isEmpty())
             {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado el registro con el id " + id);
             }
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(response.get());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
         }
     }
+
     //endregion
 
     //region post controller
@@ -53,8 +55,8 @@ public class HomeController {
     @PostMapping("/")
     public ResponseEntity<?> create(@RequestBody Home input){
         try {
-            service.create(input);
-            return ResponseEntity.ok().build();
+            Home response = service.create(input);
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

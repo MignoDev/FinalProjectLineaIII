@@ -2,6 +2,7 @@ package com.example.homefinance.Repository
 
 import com.example.homefinance.Interfaces.RetrofitClient
 import com.example.homefinance.Model.Income
+import com.example.homefinance.Model.IncomeCreate
 
 class IncomeRepository {
 
@@ -13,7 +14,7 @@ class IncomeRepository {
         return RetrofitClient.apiService.findIncome(id)
     }
 
-    suspend fun create(input: Income) {
+    suspend fun create(input: IncomeCreate) {
         return RetrofitClient.apiService.createIncome(input)
     }
 

@@ -24,7 +24,14 @@ class UserViewModel : ViewModel() {
 
     //variable para gestionar los datos
     private val _user = MutableLiveData<List<User>?>(emptyList())
+    private val _logedIn = MutableLiveData<Boolean>(false)
+    private val _userUnique = MutableLiveData<User>(null)
+    private val _userInvite = MutableLiveData<User>(null)
+
     val user: LiveData<List<User>?> = _user
+    val loggedIn: LiveData<Boolean> = _logedIn
+    val userUnique: LiveData<User> = _userUnique
+    val userInvite: LiveData<User> = _userInvite
 
 
     //obtener todos los datos
@@ -43,6 +50,32 @@ class UserViewModel : ViewModel() {
             val user = withContext(Dispatchers.IO) {
                 repository.find(id)
             }
+            _userUnique.postValue(user)
+        }
+    }
+
+    //obetener registro por nombre de usuario
+    fun findUserName(userName: String) {
+        viewModelScope.launch {
+            try {
+                val user = withContext (Dispatchers.IO) {
+                    repository.findUserName(userName)
+                }
+                _userInvite.postValue(user)
+            } catch (e: Exception)
+            {
+
+            }
+
+        }
+    }
+
+    fun loginFindUer (userName: String) {
+        viewModelScope.launch {
+            val user = withContext (Dispatchers.IO) {
+                repository.findUserName(userName)
+            }
+            _userUnique.postValue(user)
         }
     }
 
@@ -57,7 +90,10 @@ class UserViewModel : ViewModel() {
     //inciar sesión
     fun login(input: LoginRequest) {
         viewModelScope.launch {
-            repository.login(input)
+            val loggedIn = withContext(Dispatchers.IO) {
+                repository.login(input)
+            }
+            _logedIn.postValue(loggedIn)
         }
     }
 

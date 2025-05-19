@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.homefinance.Model.PlannedExpenseDetail
+import com.example.homefinance.Model.PlannedExpenseDetailCreate
 import com.example.homefinance.Repository.PlannedExpenseDetailRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,10 +39,9 @@ class PlannedExpenseDetailViewModel : ViewModel() {
     }
 
     //crear registro
-    fun createPlannedExpenseDetail(input: PlannedExpenseDetail) {
+    fun createPlannedExpenseDetail(input: PlannedExpenseDetailCreate) {
         viewModelScope.launch {
             repository.create(input)
-            listPlannedExpenseDetails()
         }
     }
 

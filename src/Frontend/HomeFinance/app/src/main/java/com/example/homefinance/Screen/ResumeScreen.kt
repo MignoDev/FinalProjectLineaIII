@@ -18,29 +18,49 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import co.yml.charts.common.model.Point
 import co.yml.charts.ui.piechart.models.PieChartData
 import com.example.homefinance.Components.BarChartComponent
 import com.example.homefinance.Components.DropdownComponent
 import com.example.homefinance.Components.LineChartComponent
 import com.example.homefinance.Components.PieChartComponent
+import com.example.homefinance.ViewModel.UserViewModel
+import kotlinx.coroutines.launch
 import java.nio.file.WatchEvent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ResumeScreen () {
+fun ResumeScreen (userName: Long, userViewModel: UserViewModel = viewModel()) {
 
     val options = listOf("Hogar 1", "Hogar 2", "Hogar 3")
     var selectedGraph by remember { mutableIntStateOf(0) }
+
+    val user by userViewModel.userUnique.observeAsState(null)
+
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    LaunchedEffect(true) {
+        scope.launch {
+            userViewModel.findUser(userName)
+            user?.let { safeUser ->
+
+            }
+        }
+    }
 
 
 //region Contenedor de la pantalla
@@ -144,7 +164,7 @@ fun ResumeScreen () {
         LineChartComponent(listOf(
             Point(0f, 40f),
             Point(1f, 90f),
-            Point(2f, 0f),
+            Point(2f, -10f),
             Point(3f, 60f),
             Point(4f, 10f),
         ))
@@ -179,7 +199,7 @@ fun ResumeScreen () {
         //endregion
 
         //region actualizaciones recientes
-        Text(text = "Actualizaciones del hogar",
+        Text(text = "Actualizaciones",
             fontWeight = FontWeight.SemiBold,
             style = TextStyle(fontSize = 22.sp))
         Card (modifier = Modifier

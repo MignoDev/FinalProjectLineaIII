@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.homefinance.Model.PlannedExpense
+import com.example.homefinance.Model.PlannedExpenseCreate
 import com.example.homefinance.Repository.PlannedExpenseRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,7 +17,10 @@ class PlannedExpenseViewModel : ViewModel() {
 
     //variable para gestionar los datos
     private val _plannedExpense = MutableLiveData<List<PlannedExpense>?>(emptyList())
+    private val _plannedExpenseCreate = MutableLiveData<PlannedExpense>()
+
     val plannedExpense: MutableLiveData<List<PlannedExpense>?> = _plannedExpense
+    val plannedExpenseCreate: MutableLiveData<PlannedExpense> = _plannedExpenseCreate
 
     //obtener todos los datos
     fun listPlannedExpenses() {
@@ -38,10 +42,12 @@ class PlannedExpenseViewModel : ViewModel() {
     }
 
     //crear registro
-    fun createPlannedExpense(input: PlannedExpense) {
+    fun createPlannedExpense(input: PlannedExpenseCreate) {
         viewModelScope.launch {
-            repository.create(input)
-            listPlannedExpenses()
+            val plannedExpenseCreate = withContext (Dispatchers.IO) {
+                repository.create(input)
+            }
+            _plannedExpenseCreate.postValue(plannedExpenseCreate)
         }
     }
 

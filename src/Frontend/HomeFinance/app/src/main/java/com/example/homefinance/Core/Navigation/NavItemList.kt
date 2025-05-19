@@ -11,15 +11,16 @@ import androidx.compose.material.icons.filled.DataThresholding
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.HomeWork
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
 import com.example.homefinance.Model.NavItem
 
 object NavItemList {
 
     val navItemList = listOf(
         NavItem("Resumen", Icons.Default.Analytics),
-        NavItem("Transacciones", Icons.Default.CurrencyExchange),
+        //NavItem("Transacciones", Icons.Default.CurrencyExchange),
         NavItem("", Icons.Default.AddCircle),
-        NavItem("Inversiones", Icons.Default.DataThresholding),
-        NavItem("Perfil", Icons.Default.Person)
+        //NavItem("Inversiones", Icons.Default.DataThresholding),
+        NavItem("Opciones", Icons.Default.Settings)
     )
 }

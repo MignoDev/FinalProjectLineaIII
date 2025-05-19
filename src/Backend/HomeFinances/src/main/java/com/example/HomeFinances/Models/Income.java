@@ -1,5 +1,6 @@
 package com.example.HomeFinances.Models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ public class Income {
 
     private String description;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
     private double amount;

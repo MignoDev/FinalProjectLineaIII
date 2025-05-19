@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.homefinance.Model.Home
+import com.example.homefinance.Model.HomeCreate
 import com.example.homefinance.Repository.HomeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,6 +18,12 @@ class HomeViewModel : ViewModel() {
     //variable para gestionar los datos
     private val _home = MutableLiveData<List<Home>?>(emptyList())
     val home: MutableLiveData<List<Home>?> = _home
+
+    private val _homeUnique = MutableLiveData<Home?>(null)
+    val homeUnique: MutableLiveData<Home?> = _homeUnique
+
+    private val _homeId = MutableLiveData<Home>(null)
+    val homeId: MutableLiveData<Home> = _homeId
 
     //obtener todos los datos
     fun listHomes() {
@@ -34,14 +41,31 @@ class HomeViewModel : ViewModel() {
             val home = withContext(Dispatchers.IO) {
                 repository.find(id)
             }
+            _homeUnique.postValue(home)
         }
     }
 
     //crear registro
-    fun createHome(input: Home) {
+    /*
+    fun createHome(input: HomeCreate) {
         viewModelScope.launch {
-            repository.create(input)
-            listHomes()
+            val homeId = withContext(Dispatchers.IO) {
+                repository.create(input)
+            }
+            _homeId.postValue(homeId)
+        }
+    }
+*/
+    fun createHome(home: HomeCreate, onResult: (Home?) -> Unit) {
+        viewModelScope.launch {
+            try {
+                // Llama al repositorio o caso de uso que cree el hogar
+                val newHome = repository.create(home) // Devuelve un objeto Home o null
+                onResult(newHome)
+
+            } catch (e: Exception) {
+                onResult(null) // En caso de error, devolver null
+            }
         }
     }
 

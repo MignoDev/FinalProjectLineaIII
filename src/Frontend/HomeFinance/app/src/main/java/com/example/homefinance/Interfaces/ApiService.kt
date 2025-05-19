@@ -4,16 +4,23 @@ import com.example.homefinance.Model.ActualExpense
 import com.example.homefinance.Model.EarnInvestment
 import com.example.homefinance.Model.ExpenseMatching
 import com.example.homefinance.Model.Home
+import com.example.homefinance.Model.HomeCreate
 import com.example.homefinance.Model.HomeUser
+import com.example.homefinance.Model.HomeUserCreate
 import com.example.homefinance.Model.Income
+import com.example.homefinance.Model.IncomeCreate
 import com.example.homefinance.Model.Investment
+import com.example.homefinance.Model.InvestmentCreate
 import com.example.homefinance.Model.LoginRequest
 import com.example.homefinance.Model.PlannedExpense
+import com.example.homefinance.Model.PlannedExpenseCreate
 import com.example.homefinance.Model.PlannedExpenseDetail
+import com.example.homefinance.Model.PlannedExpenseDetailCreate
 import com.example.homefinance.Model.TypeExpense
 import com.example.homefinance.Model.TypeIncome
 import com.example.homefinance.Model.User
 import com.example.homefinance.Model.UserRequest
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
@@ -87,10 +94,10 @@ interface ApiService {
     suspend fun listHome(): List<Home>
 
     @GET("home/{id}")
-    suspend fun findHome(@Path("id") id: Long): Home
+    suspend fun findHome(@Path("id") id: Long): Response<Home>
 
     @POST("home/")
-    suspend fun createHome(@Body input: Home)
+    suspend fun createHome(@Body input: HomeCreate) : Home
 
     @PUT("home/{id}")
     suspend fun updateHome(@Path("id") id: Long, @Body input: Home)
@@ -108,8 +115,11 @@ interface ApiService {
     @GET("homeuser/{id}")
     suspend fun findHomeUser(@Path("id") id: Long): HomeUser
 
+    @GET("homeuser/user/{userId}")
+    suspend fun findHomeUserByUserId(@Path("userId") userId: Long) : HomeUser
+
     @POST("homeuser/")
-    suspend fun createHomeUser(@Body input: HomeUser)
+    suspend fun createHomeUser(@Body input: HomeUserCreate)
 
     @PUT("homeuser/{id}")
     suspend fun updateHomeUser(@Path("id") id: Long, @Body input: HomeUser)
@@ -128,7 +138,7 @@ interface ApiService {
     suspend fun findIncome(@Path("id") id: Long): Income
 
     @POST("income/")
-    suspend fun createIncome(@Body input: Income)
+    suspend fun createIncome(@Body input: IncomeCreate)
 
     @PUT("income/{id}")
     suspend fun updateIncome(@Path("id") id: Long, @Body input: Income)
@@ -147,7 +157,7 @@ interface ApiService {
     suspend fun findInvestment(@Path("id") id: Long): Investment
 
     @POST("investment/")
-    suspend fun createInvestment(@Body input: Investment)
+    suspend fun createInvestment(@Body input: InvestmentCreate)
 
     @PUT("investment/{id}")
     suspend fun updateInvestment(@Path("id") id: Long, @Body input: Investment)
@@ -166,7 +176,7 @@ interface ApiService {
     suspend fun findPlannedExpense(@Path("id") id: Long): PlannedExpense
 
     @POST("plannedexpense/")
-    suspend fun createPlannedExpense(@Body input: PlannedExpense)
+    suspend fun createPlannedExpense(@Body input: PlannedExpenseCreate): PlannedExpense
 
     @PUT("plannedexpense/{id}")
     suspend fun updatePlannedExpense(@Path("id") id: Long, @Body input: PlannedExpense)
@@ -185,7 +195,7 @@ interface ApiService {
     suspend fun findPlannedExpenseDetail(@Path("id") id: Long): PlannedExpenseDetail
 
     @POST("plannedexpensedetail/")
-    suspend fun createPlannedExpenseDetail(@Body input: PlannedExpenseDetail)
+    suspend fun createPlannedExpenseDetail(@Body input: PlannedExpenseDetailCreate)
 
     @PUT("plannedexpensedetail/{id}")
     suspend fun updatePlannedExpenseDetail(@Path("id") id: Long, @Body input: PlannedExpenseDetail)
@@ -241,11 +251,14 @@ interface ApiService {
     @GET("user/{id}")
     suspend fun findUser(@Path("id") id: Long): User
 
+    @GET("user/user/{userName}")
+    suspend fun findUserName(@Path("userName") userName: String): User
+
     @POST("user/")
     suspend fun createUser(@Body input: UserRequest)
 
     @POST("user/login")
-    suspend fun login(@Body input: LoginRequest)
+    suspend fun login(@Body input: LoginRequest): Boolean
 
     @PUT("user/{id}")
     suspend fun updateUser(@Path("id") id: Long, @Body input: UserRequest)

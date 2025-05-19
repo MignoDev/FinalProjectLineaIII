@@ -1,13 +1,12 @@
 package com.example.HomeFinances.Services;
 
-import com.example.HomeFinances.Models.EarnInvestment;
 import com.example.HomeFinances.Models.Home;
-import com.example.HomeFinances.Repositories.EarnInvestmentRepository;
 import com.example.HomeFinances.Repositories.HomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HomeService {
@@ -21,16 +20,16 @@ public class HomeService {
         return repo.findAll();
     }
 
-    public Home findById(long id)
+    public Optional<Home> findById(long id)
     {
-        return repo.getReferenceById(id);
+        return repo.findById(id);
     }
     //endregion
 
     //region post service
-    public void create (Home input)
+    public Home create (Home input)
     {
-        repo.save(input);
+        return repo.save(input);
     }
     //endregion
 

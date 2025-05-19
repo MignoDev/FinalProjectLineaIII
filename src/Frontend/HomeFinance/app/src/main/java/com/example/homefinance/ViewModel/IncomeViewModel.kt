@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.homefinance.Model.Income
+import com.example.homefinance.Model.IncomeCreate
 import com.example.homefinance.Repository.IncomeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,10 +39,9 @@ class IncomeViewModel : ViewModel() {
     }
 
     //crear registro
-    fun createIncome(input: Income) {
+    fun createIncome(input: IncomeCreate) {
         viewModelScope.launch {
             repository.create(input)
-            listIncomes()
         }
     }
 

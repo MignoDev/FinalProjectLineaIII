@@ -25,12 +25,16 @@ public class PlannedExpenseService {
     {
         return repo.getReferenceById(id);
     }
+
+    public List<PlannedExpense> findByHomeId(long id) {
+        return repo.findByHomeId(id);
+    }
     //endregion
 
     //region post service
-    public void create (PlannedExpense input)
+    public PlannedExpense create (PlannedExpense input)
     {
-        repo.save(input);
+        return repo.save(input);
     }
     //endregion
 
