@@ -31,10 +31,12 @@ public class Income {
 
     @ManyToOne
     @JoinColumn(name = "home_id", insertable = false, updatable = false)
+    @JsonIgnore
     private Home home;
 
     @ManyToOne
     @JoinColumn(name = "type_id", updatable = false, insertable = false)
+    @JsonIgnore
     private TypeIncome typeIncome;
 
     public long getId() {

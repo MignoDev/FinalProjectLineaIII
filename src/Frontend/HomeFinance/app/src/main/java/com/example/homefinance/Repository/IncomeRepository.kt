@@ -14,6 +14,10 @@ class IncomeRepository {
         return RetrofitClient.apiService.findIncome(id)
     }
 
+    suspend fun findByHomeId(id: Long): List<Income> {
+        return RetrofitClient.apiService.findIncomeByHomeId(id)
+    }
+
     suspend fun create(input: IncomeCreate) {
         return RetrofitClient.apiService.createIncome(input)
     }

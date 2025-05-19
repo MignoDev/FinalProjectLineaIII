@@ -38,6 +38,15 @@ class InvestmentViewModel : ViewModel() {
         }
     }
 
+    fun findInvestmentByHomeId(id: Long) {
+        viewModelScope.launch {
+            val investmentList = withContext(Dispatchers.IO) {
+                repository.findByHomeId(id)
+            }
+            _investment.postValue(investmentList)
+        }
+    }
+
     //crear registro
     fun createInvestment(input: InvestmentCreate) {
         viewModelScope.launch {

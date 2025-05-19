@@ -46,6 +46,21 @@ public class PlannedExpenseDetailController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
         }
     }
+
+    @GetMapping("/planned/{id}")
+    public ResponseEntity<?>findByPlannedExpenseId (@PathVariable long id)
+    {
+        try {
+            PlannedExpenseDetail response = service.findByPlannedExpenseId(id);
+            if (response == null)
+            {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado el registro con el id " + id);
+            }
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
+        }
+    }
     //endregion
 
     //region post controller

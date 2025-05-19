@@ -27,6 +27,7 @@ public class Investment {
 
     @ManyToOne
     @JoinColumn(name = "home_id", insertable = false, updatable = false)
+    @JsonIgnore
     private Home home;
 
     @OneToMany(mappedBy = "investment")

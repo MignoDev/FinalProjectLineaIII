@@ -26,6 +26,11 @@ public class PlannedExpenseDetailService {
     {
         return repo.getReferenceById(id);
     }
+
+    public PlannedExpenseDetail findByPlannedExpenseId(long id)
+    {
+        return repo.findbyPlannedExpenseId(id);
+    }
     //endregion
 
     //region post service

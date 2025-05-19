@@ -10,6 +10,10 @@ class PlannedExpenseRepository {
         return RetrofitClient.apiService.listPlannedExpense()
     }
 
+    suspend fun findByHome(id: Long): List<PlannedExpense> {
+        return RetrofitClient.apiService.findPlannedExpenseByHomeId(id)
+    }
+
     suspend fun find(id: Long): PlannedExpense {
         return RetrofitClient.apiService.findPlannedExpense(id)
     }

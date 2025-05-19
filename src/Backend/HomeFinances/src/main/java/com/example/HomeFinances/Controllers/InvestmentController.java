@@ -29,7 +29,18 @@ public class InvestmentController {
         {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
         }
+    }
 
+    @GetMapping("/home/{id}")
+    public ResponseEntity<?> findByHomeId(long id)
+    {
+        try {
+            List<Investment> response = service.findByHomeId(id);
+            return ResponseEntity.ok(response);
+        } catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")

@@ -32,6 +32,16 @@ class PlannedExpenseViewModel : ViewModel() {
         }
     }
 
+    //Obtener filas por home_id
+    fun findPlannedExpenseByHomeId(id: Long) {
+        viewModelScope.launch {
+            val plannedExpenseList = withContext(Dispatchers.IO) {
+                repository.findByHome(id)
+            }
+            _plannedExpense.postValue(plannedExpenseList)
+        }
+    }
+
     //obtener dato por id
     fun findPlannedExpense(id: Long) {
         viewModelScope.launch {

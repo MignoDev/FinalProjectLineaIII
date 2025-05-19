@@ -83,10 +83,18 @@ fun HomeScreen (userName: Long,
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
+    //Se obtiene el homeUser al cargar la ventana
+    LaunchedEffect(true) {
+        homeUserViewModel.findHomeUserByUserId(userName)
+    }
+
+
+    //Se obtiene la informacion del usuario al cambiar el usuario
     LaunchedEffect(userName) {
         userViewModel.findUser(userName)
     }
 
+    //Se carga el ingreso siempre que halla un cambio en el home e incomeTrigger sea true
     LaunchedEffect(home) {
         if(incomeTrigger)
         {
@@ -106,6 +114,7 @@ fun HomeScreen (userName: Long,
         }
     }
 
+    //Se carga el Gast siempre que halla un cambio en el home y expenseTrigger sea true
     LaunchedEffect(home) {
         if(expenseTrigger)
         {
@@ -121,6 +130,7 @@ fun HomeScreen (userName: Long,
         }
     }
 
+    //Se carga el Detalle del gasto siempre que halla un cambio en el expenseCreate y expense Trigger sea true
     LaunchedEffect(expenseCreate) {
         if (expenseTrigger)
         {
@@ -134,10 +144,10 @@ fun HomeScreen (userName: Long,
                 inputValor = ""
                 expenseTrigger = false
             }
-
         }
     }
 
+    //Se carga la inversión siempre que halla un cambio en el home e investmentTrigger sea true
     LaunchedEffect(home) {
         if(investmentTrigger)
         {
@@ -156,6 +166,8 @@ fun HomeScreen (userName: Long,
 
         }
     }
+
+
 
     Column (
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -350,6 +362,7 @@ fun HomeScreen (userName: Long,
                 ) {
                     Button(
                         onClick = {
+                            incomeViewModel.findIncomeByHomeId(home!!.homeId)
                             showOption = 1
                         }
                     ) {
@@ -357,6 +370,7 @@ fun HomeScreen (userName: Long,
                     }
                     Button(
                         onClick = {
+                            expenseViewModel.findPlannedExpenseByHomeId(home!!.homeId)
                             showOption = 2
                         }
                     ) {
@@ -364,6 +378,7 @@ fun HomeScreen (userName: Long,
                     }
                     Button(
                         onClick = {
+                            investmentViewModel.findInvestmentByHomeId(home!!.homeId)
                             showOption = 3
                         }
                     ) {

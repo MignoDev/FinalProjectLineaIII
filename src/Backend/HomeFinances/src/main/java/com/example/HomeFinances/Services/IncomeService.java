@@ -25,6 +25,10 @@ public class IncomeService {
     {
         return repo.getReferenceById(id);
     }
+
+    public List<Income> findByHomeId(long id) {
+        return repo.findByHomeId(id);
+    }
     //endregion
 
     //region post service

@@ -14,6 +14,10 @@ class InvestmentRepository {
         return RetrofitClient.apiService.findInvestment(id)
     }
 
+    suspend fun findByHomeId(id: Long): List<Investment> {
+        return RetrofitClient.apiService.findInvestmentByHomeId(id)
+    }
+
     suspend fun create(input: InvestmentCreate) {
         return RetrofitClient.apiService.createInvestment(input)
     }

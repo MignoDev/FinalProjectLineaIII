@@ -25,6 +25,10 @@ public class InvestmentService {
     {
         return repo.getReferenceById(id);
     }
+
+    public List<Investment> findByHomeId(long id) {
+        return repo.FindByHomeId(id);
+    }
     //endregion
 
     //region post service

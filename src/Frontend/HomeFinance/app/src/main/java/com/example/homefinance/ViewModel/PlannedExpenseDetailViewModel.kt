@@ -38,6 +38,14 @@ class PlannedExpenseDetailViewModel : ViewModel() {
         }
     }
 
+    fun findPlannedExpenseDetailByPlannedExpenseId(id: Long) {
+        viewModelScope.launch {
+            val plannedExpenseDetailList = withContext(Dispatchers.IO) {
+                repository.findByPlannedExpense(id)
+            }
+        }
+    }
+
     //crear registro
     fun createPlannedExpenseDetail(input: PlannedExpenseDetailCreate) {
         viewModelScope.launch {

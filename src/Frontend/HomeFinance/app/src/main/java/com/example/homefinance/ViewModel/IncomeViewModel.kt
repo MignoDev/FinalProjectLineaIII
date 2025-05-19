@@ -38,6 +38,15 @@ class IncomeViewModel : ViewModel() {
         }
     }
 
+    fun findIncomeByHomeId(id: Long) {
+        viewModelScope.launch {
+            val incomeList = withContext(Dispatchers.IO) {
+                repository.findByHomeId(id)
+            }
+            _income.postValue(incomeList)
+        }
+    }
+
     //crear registro
     fun createIncome(input: IncomeCreate) {
         viewModelScope.launch {

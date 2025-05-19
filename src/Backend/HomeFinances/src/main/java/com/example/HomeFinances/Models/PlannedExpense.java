@@ -29,10 +29,12 @@ public class PlannedExpense {
 
     @ManyToOne
     @JoinColumn(name = "type_id", insertable = false, updatable = false)
+    @JsonIgnore
     private TypeExpense typeExpense;
 
     @ManyToOne
     @JoinColumn(name = "home_id", updatable = false, insertable = false)
+    @JsonIgnore
     private Home home;
 
     @OneToMany(mappedBy = "plannedExpense")

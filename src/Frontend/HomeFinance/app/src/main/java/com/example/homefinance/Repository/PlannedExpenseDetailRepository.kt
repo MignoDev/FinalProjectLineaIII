@@ -14,6 +14,10 @@ class PlannedExpenseDetailRepository {
         return RetrofitClient.apiService.findPlannedExpenseDetail(id)
     }
 
+    suspend fun findByPlannedExpense (id: Long): PlannedExpenseDetail {
+        return RetrofitClient.apiService.findPlannedExpenseDetailByPlannedExpenseId(id)
+    }
+
     suspend fun create(input: PlannedExpenseDetailCreate) {
         return RetrofitClient.apiService.createPlannedExpenseDetail(input)
     }

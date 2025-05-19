@@ -168,6 +168,7 @@ fun ResumeScreen (userName: Long, userViewModel: UserViewModel = viewModel()) {
             Point(3f, 60f),
             Point(4f, 10f),
         ))
+
         /*
         PieChartComponent(listOf(
 

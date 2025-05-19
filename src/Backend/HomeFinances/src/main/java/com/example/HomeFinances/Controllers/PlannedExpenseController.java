@@ -48,7 +48,7 @@ public class PlannedExpenseController {
     }
 
     @GetMapping("home/{id}")
-    public ResponseEntity<?> find(@PathVariable long id)
+    public ResponseEntity<?> findByHomeId(@PathVariable long id)
     {
         try {
             List<PlannedExpense> response = service.findByHomeId(id);
@@ -61,6 +61,7 @@ public class PlannedExpenseController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
         }
     }
+
     //endregion
 
     //region post controller

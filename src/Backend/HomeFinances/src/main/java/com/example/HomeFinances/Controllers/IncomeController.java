@@ -46,6 +46,21 @@ public class IncomeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
         }
     }
+
+    @GetMapping("/home/{id}")
+    public ResponseEntity<?> findByHomeId(@PathVariable long id)
+    {
+        try {
+            List<Income> response = service.findByHomeId(id);
+            if (response == null)
+            {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado el registro con el id " + id);
+            }
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
+        }
+    }
     //endregion
 
     //region post controller

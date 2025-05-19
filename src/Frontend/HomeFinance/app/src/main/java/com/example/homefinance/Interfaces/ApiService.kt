@@ -50,6 +50,7 @@ interface ApiService {
     suspend fun deleteActualExpense(@Path("id") id: Long)
 
     //endregion
+
     //region earninvestment Service
 
     @GET("earninvestment/")
@@ -137,6 +138,9 @@ interface ApiService {
     @GET("income/{id}")
     suspend fun findIncome(@Path("id") id: Long): Income
 
+    @GET("income/home/{id}")
+    suspend fun findIncomeByHomeId(@Path("id") id: Long): List<Income>
+
     @POST("income/")
     suspend fun createIncome(@Body input: IncomeCreate)
 
@@ -155,6 +159,9 @@ interface ApiService {
 
     @GET("investment/{id}")
     suspend fun findInvestment(@Path("id") id: Long): Investment
+
+    @GET("investment/home/{id}")
+    suspend fun findInvestmentByHomeId(@Path("id") id: Long): List<Investment>
 
     @POST("investment/")
     suspend fun createInvestment(@Body input: InvestmentCreate)
@@ -175,6 +182,9 @@ interface ApiService {
     @GET("plannedexpense/{id}")
     suspend fun findPlannedExpense(@Path("id") id: Long): PlannedExpense
 
+    @GET("plannedexpense/home/{id}")
+    suspend fun findPlannedExpenseByHomeId(@Path("id") id: Long): List<PlannedExpense>
+
     @POST("plannedexpense/")
     suspend fun createPlannedExpense(@Body input: PlannedExpenseCreate): PlannedExpense
 
@@ -193,6 +203,9 @@ interface ApiService {
 
     @GET("plannedexpensedetail/{id}")
     suspend fun findPlannedExpenseDetail(@Path("id") id: Long): PlannedExpenseDetail
+
+    @GET("plannedexpensedetail/planned/{id}")
+    suspend fun findPlannedExpenseDetailByPlannedExpenseId(@Path("id") id: Long): PlannedExpenseDetail
 
     @POST("plannedexpensedetail/")
     suspend fun createPlannedExpenseDetail(@Body input: PlannedExpenseDetailCreate)
@@ -243,7 +256,7 @@ interface ApiService {
 
     //endregion
 
-    //region plannedexpense Service
+    //region user Service
 
     @GET("user/")
     suspend fun listUser(): List<User>
