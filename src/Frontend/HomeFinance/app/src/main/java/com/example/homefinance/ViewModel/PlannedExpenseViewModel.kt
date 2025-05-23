@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.homefinance.Model.PlannedExpense
 import com.example.homefinance.Model.PlannedExpenseCreate
+import com.example.homefinance.Model.PlannedExpenseWithDetailDTO
 import com.example.homefinance.Repository.PlannedExpenseRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,9 +19,11 @@ class PlannedExpenseViewModel : ViewModel() {
     //variable para gestionar los datos
     private val _plannedExpense = MutableLiveData<List<PlannedExpense>?>(emptyList())
     private val _plannedExpenseCreate = MutableLiveData<PlannedExpense>()
+    private val _plannedExpenseFull = MutableLiveData<List<PlannedExpenseWithDetailDTO>?>(emptyList())
 
     val plannedExpense: MutableLiveData<List<PlannedExpense>?> = _plannedExpense
     val plannedExpenseCreate: MutableLiveData<PlannedExpense> = _plannedExpenseCreate
+    val plannedExpenseFull: MutableLiveData<List<PlannedExpenseWithDetailDTO>?> = _plannedExpenseFull
 
     //obtener todos los datos
     fun listPlannedExpenses() {
@@ -51,6 +54,16 @@ class PlannedExpenseViewModel : ViewModel() {
         }
     }
 
+    //Obtener datos completos
+    fun findFullExpense(id: Long) {
+        viewModelScope.launch {
+            val plannedExpense = withContext(Dispatchers.IO) {
+                repository.findFullById(id)
+            }
+            _plannedExpenseFull.postValue(plannedExpense)
+        }
+    }
+
     //crear registro
     fun createPlannedExpense(input: PlannedExpenseCreate) {
         viewModelScope.launch {
@@ -73,7 +86,6 @@ class PlannedExpenseViewModel : ViewModel() {
     fun deletePlannedExpense(id: Long) {
         viewModelScope.launch {
             repository.delete(id)
-            listPlannedExpenses()
         }
     }
     

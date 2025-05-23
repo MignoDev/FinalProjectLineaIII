@@ -23,6 +23,7 @@ public class PlannedExpenseDetail {
 
     @ManyToOne
     @JoinColumn(name = "planned_expense_id", insertable = false, updatable = false)
+    @JsonIgnore
     private PlannedExpense plannedExpense;
 
     @OneToMany(mappedBy = "plannedExpenseDetail")

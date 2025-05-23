@@ -23,8 +23,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.homefinance.Model.Income
 import com.example.homefinance.Model.IncomeCreate
@@ -34,6 +37,7 @@ import com.example.homefinance.Model.PlannedExpense
 import com.example.homefinance.Model.PlannedExpenseCreate
 import com.example.homefinance.Model.PlannedExpenseDetail
 import com.example.homefinance.Model.PlannedExpenseDetailCreate
+import com.example.homefinance.Model.PlannedExpenseWithDetailDTO
 import com.example.homefinance.ViewModel.HomeUserViewModel
 import com.example.homefinance.ViewModel.HomeViewModel
 import com.example.homefinance.ViewModel.IncomeViewModel
@@ -58,6 +62,7 @@ fun HomeScreen (userName: Long,
     val expenseCreate by expenseViewModel.plannedExpenseCreate.observeAsState(null)
     val user by userViewModel.userUnique.observeAsState(null)
     val home by homeUserViewModel.homeUserUnique.observeAsState(null)
+    val fullExpense by expenseViewModel.plannedExpenseFull.observeAsState(emptyList())
 
     var showDialogIngreso by remember { mutableStateOf(false) }
     var showDialogGasto by remember { mutableStateOf(false) }
@@ -65,7 +70,7 @@ fun HomeScreen (userName: Long,
 
 
     var ingresoAEliminar by remember { mutableStateOf<Income?>(null) }
-    var gastoAEliminar by remember { mutableStateOf<PlannedExpense?>(null) }
+    var gastoAEliminar by remember { mutableStateOf<PlannedExpenseWithDetailDTO?>(null) }
     var inversionAEliminar by remember { mutableStateOf<Investment?>(null) }
 
 
@@ -370,7 +375,7 @@ fun HomeScreen (userName: Long,
                     }
                     Button(
                         onClick = {
-                            expenseViewModel.findPlannedExpenseByHomeId(home!!.homeId)
+                            expenseViewModel.findFullExpense(home!!.homeId)
                             showOption = 2
                         }
                     ) {
@@ -401,9 +406,33 @@ fun HomeScreen (userName: Long,
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(8.dp),
-                                        horizontalArrangement = Arrangement.SpaceBetween
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
                                     ) {
-                                        Text(text = "Ingresos")
+                                        Column (verticalArrangement = Arrangement.Center) {
+                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                                                Text(text = "Ingreso: ",
+                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
+                                                    fontSize = 17.sp,
+                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                                                Text(text = ingreso.description)
+                                            }
+                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                                                Text(text = "Monto: ",
+                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
+                                                    fontSize = 17.sp,
+                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                                                Text(text = "${ingreso.amount}\$")
+                                            }
+                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                                                Text(text = "Fecha de creación: ",
+                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
+                                                    fontSize = 17.sp,
+                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                                                Text(text = "${ingreso.date}")
+                                            }
+
+                                        }
                                         Button(
                                             onClick = {
                                                 // Mostrar el diálogo de confirmación de eliminación
@@ -411,15 +440,11 @@ fun HomeScreen (userName: Long,
                                                 ingresoAEliminar = ingreso
                                                 showDialogIngreso = true
                                             },
-                                            modifier = Modifier.padding(top = 8.dp),
-                                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                                         ) {
                                             Icon(
                                                 Icons.Filled.Delete,
-                                                contentDescription = "Eliminar Estudiante Icon"
+                                                contentDescription = "Eliminar ingreso Icon"
                                             )
-                                            Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text = "Eliminar")
                                         }
                                     }
                                 }
@@ -430,30 +455,58 @@ fun HomeScreen (userName: Long,
 
                     2 -> {
                         Column {
-                            expense!!.forEach { gasto ->
+                            fullExpense!!.forEach { gasto ->
                                 Card {
                                     Row(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(8.dp),
-                                        horizontalArrangement = Arrangement.SpaceBetween
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
                                     ) {
-                                        Text(text = "Gastos")
+                                        Column (verticalArrangement = Arrangement.Center) {
+                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                                                Text(text = "Gasto: ",
+                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
+                                                    fontSize = 17.sp,
+                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                                                Text(text = gasto.plannedExpense.description)
+                                            }
+                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                                                Text(text = "Monto: ",
+                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
+                                                    fontSize = 17.sp,
+                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                                                Text(text = "${gasto.plannedExpense.amount}\$")
+                                            }
+                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                                                Text(text = "Fecha de creación: ",
+                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
+                                                    fontSize = 17.sp,
+                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                                                Text(text = "${gasto.plannedExpenseDetail.date}")
+                                            }
+                                            if(gasto.plannedExpense.comment != "")
+                                                Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                                                    Text(text = "Comentario: ",
+                                                        style = TextStyle(fontWeight = FontWeight.SemiBold),
+                                                        fontSize = 17.sp,
+                                                        modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                                                    Text(text = gasto.plannedExpense.comment)
+                                                }
+
+                                        }
                                         Button(
                                             onClick = {
                                                 // Mostrar el diálogo de confirmación de eliminación
                                                 gastoAEliminar = gasto
                                                 showDialogGasto = true
                                             },
-                                            modifier = Modifier.padding(top = 8.dp),
-                                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                                         ) {
                                             Icon(
                                                 Icons.Filled.Delete,
-                                                contentDescription = "Eliminar Estudiante Icon"
+                                                contentDescription = "Eliminar Gasto Icon"
                                             )
-                                            Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text = "Eliminar")
                                         }
                                     }
                                 }
@@ -470,9 +523,33 @@ fun HomeScreen (userName: Long,
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(8.dp),
-                                        horizontalArrangement = Arrangement.SpaceBetween
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
                                     ) {
-                                        Text(text = "Inversiones")
+                                        Column (verticalArrangement = Arrangement.Center) {
+                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                                                Text(text = "Inversión: ",
+                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
+                                                    fontSize = 17.sp,
+                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                                                Text(text = inversion.description)
+                                            }
+                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                                                Text(text = "Monto: ",
+                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
+                                                    fontSize = 17.sp,
+                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                                                Text(text = "${inversion.amount}\$")
+                                            }
+                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                                                Text(text = "Fecha de creación: ",
+                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
+                                                    fontSize = 17.sp,
+                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                                                Text(text = "${inversion.date}")
+                                            }
+
+                                        }
                                         Button(
                                             onClick = {
                                                 // Mostrar el diálogo de confirmación de eliminación
@@ -484,10 +561,8 @@ fun HomeScreen (userName: Long,
                                         ) {
                                             Icon(
                                                 Icons.Filled.Delete,
-                                                contentDescription = "Eliminar Estudiante Icon"
+                                                contentDescription = "Eliminar Inversión Icon"
                                             )
-                                            Spacer(modifier = Modifier.width(8.dp))
-                                            Text(text = "Eliminar")
                                         }
                                     }
                                 }
@@ -539,7 +614,8 @@ fun HomeScreen (userName: Long,
                         onClick = {
                             // Eliminar el estudiante si el usuario confirma
                             gastoAEliminar?.let {
-                                expenseViewModel.deletePlannedExpense(it.id)
+                                detailExpense.deletePlannedExpenseDetail(it.plannedExpenseDetail.id)
+                                expenseViewModel.deletePlannedExpense(it.plannedExpense.id)
                                 // Mostrar el Toast de éxito
                                 Toast.makeText(context, "Ingreso eliminado", Toast.LENGTH_SHORT).show()
                                 expenseViewModel.listPlannedExpenses()
@@ -569,7 +645,7 @@ fun HomeScreen (userName: Long,
                     TextButton(
                         onClick = {
                             // Eliminar el estudiante si el usuario confirma
-                            gastoAEliminar?.let {
+                            inversionAEliminar?.let {
                                 investmentViewModel.deleteInvestment(it.id)
                                 // Mostrar el Toast de éxito
                                 Toast.makeText(context, "Ingreso eliminado", Toast.LENGTH_SHORT).show()

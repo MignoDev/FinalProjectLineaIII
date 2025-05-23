@@ -16,6 +16,7 @@ import com.example.homefinance.Model.PlannedExpense
 import com.example.homefinance.Model.PlannedExpenseCreate
 import com.example.homefinance.Model.PlannedExpenseDetail
 import com.example.homefinance.Model.PlannedExpenseDetailCreate
+import com.example.homefinance.Model.PlannedExpenseWithDetailDTO
 import com.example.homefinance.Model.TypeExpense
 import com.example.homefinance.Model.TypeIncome
 import com.example.homefinance.Model.User
@@ -89,7 +90,7 @@ interface ApiService {
 
     //endregion
 
-    //region expensematching Service
+    //region home Service
 
     @GET("home/")
     suspend fun listHome(): List<Home>
@@ -184,6 +185,9 @@ interface ApiService {
 
     @GET("plannedexpense/home/{id}")
     suspend fun findPlannedExpenseByHomeId(@Path("id") id: Long): List<PlannedExpense>
+
+    @GET("plannedexpense/full/{id}")
+    suspend fun findAllExpensesById(@Path("id")id: Long): List<PlannedExpenseWithDetailDTO>
 
     @POST("plannedexpense/")
     suspend fun createPlannedExpense(@Body input: PlannedExpenseCreate): PlannedExpense

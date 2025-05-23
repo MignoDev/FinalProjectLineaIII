@@ -3,6 +3,7 @@ package com.example.homefinance.Repository
 import com.example.homefinance.Interfaces.RetrofitClient
 import com.example.homefinance.Model.PlannedExpense
 import com.example.homefinance.Model.PlannedExpenseCreate
+import com.example.homefinance.Model.PlannedExpenseWithDetailDTO
 
 class PlannedExpenseRepository {
 
@@ -16,6 +17,10 @@ class PlannedExpenseRepository {
 
     suspend fun find(id: Long): PlannedExpense {
         return RetrofitClient.apiService.findPlannedExpense(id)
+    }
+
+    suspend fun findFullById(id: Long): List<PlannedExpenseWithDetailDTO> {
+        return RetrofitClient.apiService.findAllExpensesById(id)
     }
 
     suspend fun create(input: PlannedExpenseCreate): PlannedExpense {

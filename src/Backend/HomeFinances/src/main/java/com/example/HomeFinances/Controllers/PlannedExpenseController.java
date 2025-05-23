@@ -2,6 +2,7 @@ package com.example.HomeFinances.Controllers;
 
 import com.example.HomeFinances.Models.ActualExpense;
 import com.example.HomeFinances.Models.PlannedExpense;
+import com.example.HomeFinances.Models.PlannedExpenseWithDetailDTO;
 import com.example.HomeFinances.Services.ActualExpenseService;
 import com.example.HomeFinances.Services.PlannedExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,21 @@ public class PlannedExpenseController {
     {
         try {
             List<PlannedExpense> response = service.findByHomeId(id);
+            if (response == null)
+            {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado el registro con el id " + id);
+            }
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error en el servidor: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("full/{id}")
+    public ResponseEntity<?> findFullById(@PathVariable long id)
+    {
+        try {
+            List<PlannedExpenseWithDetailDTO> response = service.findAllExpenses(id);
             if (response == null)
             {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado el registro con el id " + id);

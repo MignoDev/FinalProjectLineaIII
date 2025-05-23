@@ -32,7 +32,7 @@ public class InvestmentController {
     }
 
     @GetMapping("/home/{id}")
-    public ResponseEntity<?> findByHomeId(long id)
+    public ResponseEntity<?> findByHomeId(@PathVariable long id)
     {
         try {
             List<Investment> response = service.findByHomeId(id);
