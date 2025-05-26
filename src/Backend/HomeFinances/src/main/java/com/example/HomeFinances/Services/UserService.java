@@ -54,18 +54,16 @@ public class UserService {
     //endregion
 
     //region put service
-    public void update (long id,User  input)
+    public User update (long id,User  input)
     {
-        if (!repo.existsById(id))
-        {
-            throw new RuntimeException("Registro con el id " + id + " No existe");
+        Optional<User> usuarioOpt = repo.findById(id);
+        if (usuarioOpt.isPresent()) {
+            User usuario = usuarioOpt.get();
+            usuario.setNickName(input.getNickName());
+            return repo.save(usuario); // save actualiza si el ID ya existe
+        } else {
+            return null;
         }
-        String hashedPassword = PasswordUtils.hashPassword(input.getPassword());
-        User user = new User();
-        user.setUserName(input.getUserName());
-        user.setPassword(hashedPassword);
-        user.setNickName(input.getNickName());
-        repo.save(user);
     }
     //endregion
 

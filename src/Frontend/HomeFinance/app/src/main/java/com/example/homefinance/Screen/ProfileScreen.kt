@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.homefinance.Model.HomeCreate
 import com.example.homefinance.Model.HomeUserCreate
+import com.example.homefinance.Model.User
+import com.example.homefinance.Model.UserRequest
 import com.example.homefinance.ViewModel.HomeUserViewModel
 import com.example.homefinance.ViewModel.HomeViewModel
 import com.example.homefinance.ViewModel.UserViewModel
@@ -58,6 +60,8 @@ fun ProfileScreen (
 
     var homeName by remember { mutableStateOf("") }
     var inviteUser by remember { mutableStateOf("") }
+    var editUserName by remember { mutableStateOf(false)}
+    var userNameInput by remember { mutableStateOf("")}
 
     var inviteTriggered by remember { mutableStateOf(false) }
 
@@ -113,12 +117,61 @@ fun ProfileScreen (
                 .background(color = Color(0xff444499))
         ) {
             if (user != null) {
-                Text(
-                    text = user!!.userName,
-                    style = TextStyle(fontSize = 22.sp, color = Color(0xffffffff)),
-                    modifier = Modifier
-                        .padding(horizontal = 10.dp)
-                )
+                if (editUserName)
+                {
+                    Column (
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        TextField(
+                            value = userNameInput,
+                            onValueChange = { userNameInput = it },
+                            label = { Text(text = "Nombre de usuario") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
+                        Button(
+                            onClick = {
+                                if (userNameInput.isNotEmpty())
+                                {
+                                    val userRequest = User(id = user!!.id,userName = user!!.userName,
+                                        password = user!!.password, nickName = userNameInput)
+                                    viewModelUser.updateUser(user!!.id, userRequest)
+                                    editUserName = false
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.White // Cambia el fondo del botón
+                            )
+
+                        ) {
+                            Text(text = "Cambiar nombre")
+                        }
+                    }
+
+                } else {
+                    Text(
+                        text = user!!.nickName,
+                        style = TextStyle(fontSize = 22.sp, color = Color(0xffffffff)),
+                        modifier = Modifier
+                            .padding(horizontal = 10.dp)
+                    )
+
+                    TextButton(
+                        onClick = {
+                            userNameInput = user!!.nickName
+                            editUserName = true
+                        },
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.textButtonColors(
+                            containerColor = Color(0x33ffffff),
+                            contentColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .padding(10.dp)
+                    ) {
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = null)
+                    }
+                }
             } else {
                 // Puedes mostrar un texto de carga o un indicador visual
                 CircularProgressIndicator(
@@ -127,18 +180,7 @@ fun ProfileScreen (
                 )
             }
 
-            TextButton(
-                onClick = {},
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.textButtonColors(
-                    containerColor = Color(0x33ffffff),
-                    contentColor = Color.White
-                ),
-                modifier = Modifier
-                    .padding(10.dp)
-            ) {
-                Icon(imageVector = Icons.Default.Edit, contentDescription = null)
-            }
+
         }
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,

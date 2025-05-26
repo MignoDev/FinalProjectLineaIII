@@ -27,7 +27,7 @@ class UserRepository {
         return RetrofitClient.apiService.login(input)
     }
 
-    suspend fun update(id: Long, input: UserRequest) {
+    suspend fun update(id: Long, input: User) {
         return RetrofitClient.apiService.updateUser(id, input)
     }
 

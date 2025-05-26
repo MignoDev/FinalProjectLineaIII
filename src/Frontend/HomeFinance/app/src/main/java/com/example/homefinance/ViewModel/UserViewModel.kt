@@ -98,11 +98,11 @@ class UserViewModel : ViewModel() {
     }
 
     //actualizar registro
-    fun updateUser(id: Long, input: UserRequest) {
+    fun updateUser(id: Long, input: User) {
         viewModelScope.launch {
             repository.update(id, input)
-            listUsers()
         }
+        findUser(id)
     }
 
     //eliminar registro por id

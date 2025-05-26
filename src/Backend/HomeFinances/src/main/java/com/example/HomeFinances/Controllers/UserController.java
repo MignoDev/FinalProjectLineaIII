@@ -100,8 +100,8 @@ public class UserController {
     public ResponseEntity<?> update(@PathVariable long id, @RequestBody User input)
     {
         try {
-            service.update(id, input);
-            return ResponseEntity.ok().build();
+            User response = service.update(id, input);
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e)

@@ -26,7 +26,7 @@ class PlannedExpenseDetailRepository {
         return RetrofitClient.apiService.updatePlannedExpenseDetail(id, input)
     }
 
-    suspend fun delete(id: Long) {
+    suspend fun delete(id: Long): Long {
         return RetrofitClient.apiService.deletePlannedExpenseDetail(id)
     }
 

@@ -104,8 +104,8 @@ public class PlannedExpenseDetailController {
     public ResponseEntity<?> delete(@PathVariable long id)
     {
         try {
-            service.deleteById(id);
-            return ResponseEntity.ok().build();
+            long response = service.deleteById(id);
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {

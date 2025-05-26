@@ -52,13 +52,15 @@ public class PlannedExpenseDetailService {
     //endregion
 
     //region delete service
-    public void deleteById(long id)
+    public long deleteById(long id)
     {
         if(!repo.existsById(id))
         {
             throw new RuntimeException("Registro con el id " + id + " No existe");
         }
+        long expenseId = repo.findById(id).get().getPlannedExpenseId();
         repo.deleteById(id);
+        return expenseId;
     }
     //endregion
 }

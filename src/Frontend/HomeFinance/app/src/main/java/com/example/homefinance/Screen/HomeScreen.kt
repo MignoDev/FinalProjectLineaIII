@@ -63,6 +63,7 @@ fun HomeScreen (userName: Long,
     val user by userViewModel.userUnique.observeAsState(null)
     val home by homeUserViewModel.homeUserUnique.observeAsState(null)
     val fullExpense by expenseViewModel.plannedExpenseFull.observeAsState(emptyList())
+    val deletedExpense by detailExpense.deleted.observeAsState(null)
 
     var showDialogIngreso by remember { mutableStateOf(false) }
     var showDialogGasto by remember { mutableStateOf(false) }
@@ -83,6 +84,9 @@ fun HomeScreen (userName: Long,
     var expenseTrigger by remember { mutableStateOf(false) }
     var investmentTrigger by remember { mutableStateOf(false) }
 
+    var deletedExpenseUpdate by remember { mutableStateOf(false) }
+    var formSubmitted by remember { mutableStateOf(false)}
+
     var showOption by remember { mutableStateOf(0)}
 
     val scope = rememberCoroutineScope()
@@ -100,7 +104,7 @@ fun HomeScreen (userName: Long,
     }
 
     //Se carga el ingreso siempre que halla un cambio en el home e incomeTrigger sea true
-    LaunchedEffect(home) {
+    LaunchedEffect(incomeTrigger) {
         if(incomeTrigger)
         {
             home?.let { safeHome ->
@@ -114,13 +118,14 @@ fun HomeScreen (userName: Long,
                 inputComment = ""
                 inputValor = ""
                 incomeTrigger = false
+                formSubmitted = false
             }
 
         }
     }
 
     //Se carga el Gast siempre que halla un cambio en el home y expenseTrigger sea true
-    LaunchedEffect(home) {
+    LaunchedEffect(expenseTrigger) {
         if(expenseTrigger)
         {
             home?.let { safeHome ->
@@ -148,12 +153,13 @@ fun HomeScreen (userName: Long,
                 inputComment = ""
                 inputValor = ""
                 expenseTrigger = false
+                formSubmitted = false
             }
         }
     }
 
     //Se carga la inversión siempre que halla un cambio en el home e investmentTrigger sea true
-    LaunchedEffect(home) {
+    LaunchedEffect(investmentTrigger) {
         if(investmentTrigger)
         {
             home?.let { safeHome ->
@@ -167,11 +173,25 @@ fun HomeScreen (userName: Long,
                 inputComment = ""
                 inputValor = ""
                 investmentTrigger = false
+                formSubmitted = false
             }
 
         }
     }
 
+    LaunchedEffect(deletedExpense) {
+        if (deletedExpense != null) {
+            expenseViewModel.deletePlannedExpense(deletedExpense!!)
+            deletedExpenseUpdate = true
+        }
+    }
+
+    LaunchedEffect(deletedExpense) {
+        if (deletedExpenseUpdate)
+        {
+            expenseViewModel.findFullExpense(home!!.homeId)
+        }
+    }
 
 
     Column (
@@ -192,7 +212,9 @@ fun HomeScreen (userName: Long,
                 onClick = {
                     inputNombre = ""
                     inputValor = ""
+                    inputComment = ""
                     inputOption = 1
+                    formSubmitted = false
                 }
             ) {
                 Text(text = "Ingresos")
@@ -201,7 +223,9 @@ fun HomeScreen (userName: Long,
                 onClick = {
                     inputNombre = ""
                     inputValor = ""
+                    inputComment = ""
                     inputOption = 2
+                    formSubmitted = false
                 }
             ) {
                 Text(text = "Gastos")
@@ -210,7 +234,9 @@ fun HomeScreen (userName: Long,
                 onClick = {
                     inputNombre = ""
                     inputValor = ""
+                    inputComment = ""
                     inputOption = 3
+                    formSubmitted = false
                 }
             ) {
                 Text(text = "Inversiones")
@@ -233,8 +259,16 @@ fun HomeScreen (userName: Long,
                                     inputNombre = newValue
                                 },
                                 label = { Text("Nombre del ingreso") },
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
+                                isError = (inputNombre.isEmpty() && formSubmitted == true)
                             )
+                            if(inputNombre.isEmpty() && formSubmitted == true)
+                                Text(
+                                    text = "Este campo es obligatorio",
+                                    color = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.padding(top = 2.dp),
+                                    style = MaterialTheme.typography.labelSmall
+                                )
                             TextField(
                                 value = inputValor,
                                 onValueChange = { newValue ->
@@ -247,15 +281,27 @@ fun HomeScreen (userName: Long,
                                 keyboardOptions = KeyboardOptions.Default.copy(
                                     keyboardType = KeyboardType.Number
                                 ),
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
+                                isError = (inputValor.isEmpty() && formSubmitted == true)
                             )
+                            if(inputValor.isEmpty() && formSubmitted == true)
+                                Text(
+                                    text = "Este campo es obligatorio",
+                                    color = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.padding(top = 2.dp),
+                                    style = MaterialTheme.typography.labelSmall
+                                )
 
                             OutlinedButton(
                                 onClick = {
-                                    incomeTrigger = true
-                                    homeUserViewModel.findHomeUserByUserId(userName)
+                                    formSubmitted = true
+                                    if(inputNombre.isNotEmpty() && inputValor.isNotEmpty())
+                                    {
+                                        incomeTrigger = true
+                                        homeUserViewModel.findHomeUserByUserId(userName)
+                                        inputOption = 0
+                                    }
 
-                                    inputOption = 0
                                 }
                             ) {
                                 Text(text = "Confirmar ingreso")
@@ -276,8 +322,16 @@ fun HomeScreen (userName: Long,
                                     inputNombre = newValue
                                 },
                                 label = { Text("Nombre del Gasto") },
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
+                                isError = (inputNombre.isEmpty() && formSubmitted == true)
                             )
+                            if(inputNombre.isEmpty() && formSubmitted == true)
+                                Text(
+                                    text = "Este campo es obligatorio",
+                                    color = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.padding(top = 2.dp),
+                                    style = MaterialTheme.typography.labelSmall
+                                )
                             TextField(
                                 value = inputValor,
                                 onValueChange = { newValue ->
@@ -290,8 +344,16 @@ fun HomeScreen (userName: Long,
                                 keyboardOptions = KeyboardOptions.Default.copy(
                                     keyboardType = KeyboardType.Number
                                 ),
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
+                                isError = (inputValor.isEmpty() && formSubmitted == true)
                             )
+                            if(inputValor.isEmpty() && formSubmitted == true)
+                                Text(
+                                    text = "Este campo es obligatorio",
+                                    color = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.padding(top = 2.dp),
+                                    style = MaterialTheme.typography.labelSmall
+                                )
                             TextField(
                                 value = inputComment,
                                 onValueChange = { newValue ->
@@ -302,10 +364,13 @@ fun HomeScreen (userName: Long,
                             )
                             OutlinedButton(
                                 onClick = {
-
-                                    expenseTrigger = true
-                                    homeUserViewModel.findHomeUserByUserId(userName)
-                                    inputOption = 0
+                                    formSubmitted = true
+                                    if(inputNombre.isNotEmpty() && inputValor.isNotEmpty())
+                                    {
+                                        expenseTrigger = true
+                                        homeUserViewModel.findHomeUserByUserId(userName)
+                                        inputOption = 0
+                                    }
                                 }
                             ) {
                                 Text(text = "Confirmar Gasto")
@@ -328,8 +393,15 @@ fun HomeScreen (userName: Long,
                                 },
                                 modifier = Modifier.fillMaxWidth(),
                                 label = { Text("Nombre de la inversión") },
+                                isError = (inputNombre.isEmpty() && formSubmitted == true)
                             )
-
+                            if(inputNombre.isEmpty() && formSubmitted == true)
+                                Text(
+                                    text = "Este campo es obligatorio",
+                                    color = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.padding(top = 2.dp),
+                                    style = MaterialTheme.typography.labelSmall
+                                )
                             TextField(
                                 value = inputValor,
                                 onValueChange = { newValue ->
@@ -342,13 +414,25 @@ fun HomeScreen (userName: Long,
                                 keyboardOptions = KeyboardOptions.Default.copy(
                                     keyboardType = KeyboardType.Number
                                 ),
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
+                                isError = (inputValor.isEmpty() && formSubmitted == true)
                             )
+                            if(inputValor.isEmpty() && formSubmitted == true)
+                                Text(
+                                    text = "Este campo es obligatorio",
+                                    color = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.padding(top = 2.dp),
+                                    style = MaterialTheme.typography.labelSmall
+                                )
                             OutlinedButton(
                                 onClick = {
-                                    investmentTrigger = true
-                                    homeUserViewModel.findHomeUserByUserId(userName)
-                                    inputOption = 0
+                                    formSubmitted = true
+                                    if(inputNombre.isNotEmpty() && inputValor.isNotEmpty())
+                                    {
+                                        investmentTrigger = true
+                                        homeUserViewModel.findHomeUserByUserId(userName)
+                                        inputOption = 0
+                                    }
                                 }
                             ) {
                                 Text(text = "Confirmar Inversion")
@@ -357,314 +441,7 @@ fun HomeScreen (userName: Long,
                     }
                 }
             }
-
-            item {
-                Text(text = "Mostrar registros")
-                Row (
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Button(
-                        onClick = {
-                            incomeViewModel.findIncomeByHomeId(home!!.homeId)
-                            showOption = 1
-                        }
-                    ) {
-                        Text(text = "Ingresos")
-                    }
-                    Button(
-                        onClick = {
-                            expenseViewModel.findFullExpense(home!!.homeId)
-                            showOption = 2
-                        }
-                    ) {
-                        Text(text = "Gastos")
-                    }
-                    Button(
-                        onClick = {
-                            investmentViewModel.findInvestmentByHomeId(home!!.homeId)
-                            showOption = 3
-                        }
-                    ) {
-                        Text(text = "Inversiones")
-                    }
-                }
-            }
-            item {
-                when (showOption) {
-                    1 -> {
-                        Column (
-                            modifier = Modifier
-                                .fillMaxSize()
-                        )
-                        {
-                            income!!.forEach { ingreso ->
-                                Card()
-                                {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(8.dp),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Column (verticalArrangement = Arrangement.Center) {
-                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                                                Text(text = "Ingreso: ",
-                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
-                                                    fontSize = 17.sp,
-                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
-                                                Text(text = ingreso.description)
-                                            }
-                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                                                Text(text = "Monto: ",
-                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
-                                                    fontSize = 17.sp,
-                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
-                                                Text(text = "${ingreso.amount}\$")
-                                            }
-                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                                                Text(text = "Fecha de creación: ",
-                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
-                                                    fontSize = 17.sp,
-                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
-                                                Text(text = "${ingreso.date}")
-                                            }
-
-                                        }
-                                        Button(
-                                            onClick = {
-                                                // Mostrar el diálogo de confirmación de eliminación
-
-                                                ingresoAEliminar = ingreso
-                                                showDialogIngreso = true
-                                            },
-                                        ) {
-                                            Icon(
-                                                Icons.Filled.Delete,
-                                                contentDescription = "Eliminar ingreso Icon"
-                                            )
-                                        }
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-
-                    2 -> {
-                        Column {
-                            fullExpense!!.forEach { gasto ->
-                                Card {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(8.dp),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Column (verticalArrangement = Arrangement.Center) {
-                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                                                Text(text = "Gasto: ",
-                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
-                                                    fontSize = 17.sp,
-                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
-                                                Text(text = gasto.plannedExpense.description)
-                                            }
-                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                                                Text(text = "Monto: ",
-                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
-                                                    fontSize = 17.sp,
-                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
-                                                Text(text = "${gasto.plannedExpense.amount}\$")
-                                            }
-                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                                                Text(text = "Fecha de creación: ",
-                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
-                                                    fontSize = 17.sp,
-                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
-                                                Text(text = "${gasto.plannedExpenseDetail.date}")
-                                            }
-                                            if(gasto.plannedExpense.comment != "")
-                                                Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                                                    Text(text = "Comentario: ",
-                                                        style = TextStyle(fontWeight = FontWeight.SemiBold),
-                                                        fontSize = 17.sp,
-                                                        modifier = Modifier.align(alignment = Alignment.CenterVertically))
-                                                    Text(text = gasto.plannedExpense.comment)
-                                                }
-
-                                        }
-                                        Button(
-                                            onClick = {
-                                                // Mostrar el diálogo de confirmación de eliminación
-                                                gastoAEliminar = gasto
-                                                showDialogGasto = true
-                                            },
-                                        ) {
-                                            Icon(
-                                                Icons.Filled.Delete,
-                                                contentDescription = "Eliminar Gasto Icon"
-                                            )
-                                        }
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-
-                    3 -> {
-                        Column {
-                            investments!!.forEach { inversion ->
-                                Card {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(8.dp),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Column (verticalArrangement = Arrangement.Center) {
-                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                                                Text(text = "Inversión: ",
-                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
-                                                    fontSize = 17.sp,
-                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
-                                                Text(text = inversion.description)
-                                            }
-                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                                                Text(text = "Monto: ",
-                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
-                                                    fontSize = 17.sp,
-                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
-                                                Text(text = "${inversion.amount}\$")
-                                            }
-                                            Row (horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                                                Text(text = "Fecha de creación: ",
-                                                    style = TextStyle(fontWeight = FontWeight.SemiBold),
-                                                    fontSize = 17.sp,
-                                                    modifier = Modifier.align(alignment = Alignment.CenterVertically))
-                                                Text(text = "${inversion.date}")
-                                            }
-
-                                        }
-                                        Button(
-                                            onClick = {
-                                                // Mostrar el diálogo de confirmación de eliminación
-                                                inversionAEliminar = inversion
-                                                showDialogInversion = true
-                                            },
-                                            modifier = Modifier.padding(top = 8.dp),
-                                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-                                        ) {
-                                            Icon(
-                                                Icons.Filled.Delete,
-                                                contentDescription = "Eliminar Inversión Icon"
-                                            )
-                                        }
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if (showDialogIngreso) {
-            AlertDialog(
-                onDismissRequest = { showDialogIngreso = false },
-                title = { Text("Confirmación") },
-                text = { Text("¿Está seguro que desea eliminar a este usuario?") },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            // Eliminar el estudiante si el usuario confirma
-                            ingresoAEliminar?.let {
-                                incomeViewModel.deleteIncome(it.id)
-                                // Mostrar el Toast de éxito
-                                Toast.makeText(context, "Ingreso eliminado", Toast.LENGTH_SHORT).show()
-                                incomeViewModel.listIncomes()
-                            }
-                            showDialogIngreso = false
-                        }
-                    ) {
-                        Text("Sí")
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = { showDialogIngreso = false }
-                    ) {
-                        Text("No")
-                    }
-                }
-            )
         }
 
-        if (showDialogGasto) {
-            AlertDialog(
-                onDismissRequest = { showDialogGasto = false },
-                title = { Text("Confirmación") },
-                text = { Text("¿Está seguro que desea eliminar a este usuario?") },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            // Eliminar el estudiante si el usuario confirma
-                            gastoAEliminar?.let {
-                                detailExpense.deletePlannedExpenseDetail(it.plannedExpenseDetail.id)
-                                expenseViewModel.deletePlannedExpense(it.plannedExpense.id)
-                                // Mostrar el Toast de éxito
-                                Toast.makeText(context, "Ingreso eliminado", Toast.LENGTH_SHORT).show()
-                                expenseViewModel.listPlannedExpenses()
-                            }
-                            showDialogGasto = false
-                        }
-                    ) {
-                        Text("Sí")
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = { showDialogIngreso = false }
-                    ) {
-                        Text("No")
-                    }
-                }
-            )
-        }
-
-        if (showDialogInversion) {
-            AlertDialog(
-                onDismissRequest = { showDialogInversion = false },
-                title = { Text("Confirmación") },
-                text = { Text("¿Está seguro que desea eliminar a este usuario?") },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            // Eliminar el estudiante si el usuario confirma
-                            inversionAEliminar?.let {
-                                investmentViewModel.deleteInvestment(it.id)
-                                // Mostrar el Toast de éxito
-                                Toast.makeText(context, "Ingreso eliminado", Toast.LENGTH_SHORT).show()
-                                investmentViewModel.listInvestments()
-                            }
-                            showDialogInversion = false
-                        }
-                    ) {
-                        Text("Sí")
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = { showDialogInversion = false }
-                    ) {
-                        Text("No")
-                    }
-                }
-            )
-        }
     }
 }

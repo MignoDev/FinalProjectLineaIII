@@ -218,7 +218,7 @@ interface ApiService {
     suspend fun updatePlannedExpenseDetail(@Path("id") id: Long, @Body input: PlannedExpenseDetail)
 
     @DELETE("plannedexpensedetail/{id}")
-    suspend fun deletePlannedExpenseDetail(@Path("id") id: Long)
+    suspend fun deletePlannedExpenseDetail(@Path("id") id: Long): Long
 
     //endregion
 
@@ -278,7 +278,7 @@ interface ApiService {
     suspend fun login(@Body input: LoginRequest): Boolean
 
     @PUT("user/{id}")
-    suspend fun updateUser(@Path("id") id: Long, @Body input: UserRequest)
+    suspend fun updateUser(@Path("id") id: Long, @Body input: User)
 
     @DELETE("user/{id}")
     suspend fun deleteUser(@Path("id") id: Long)

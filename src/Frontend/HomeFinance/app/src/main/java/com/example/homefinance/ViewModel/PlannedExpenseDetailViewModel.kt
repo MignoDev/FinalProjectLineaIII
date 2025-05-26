@@ -17,7 +17,11 @@ class PlannedExpenseDetailViewModel : ViewModel() {
 
     //variable para gestionar los datos
     private val _plannedExpenseDetail = MutableLiveData<List<PlannedExpenseDetail>?>(emptyList())
+    private val _deleted = MutableLiveData<Long>(null)
+
+
     val plannedExpenseDetail: MutableLiveData<List<PlannedExpenseDetail>?> = _plannedExpenseDetail
+    val deleted: MutableLiveData<Long> = _deleted
 
     //obtener todos los datos
     fun listPlannedExpenseDetails() {
@@ -64,9 +68,11 @@ class PlannedExpenseDetailViewModel : ViewModel() {
     //eliminar registro por id
     fun deletePlannedExpenseDetail(id: Long) {
         viewModelScope.launch {
-            repository.delete(id)
+            val response = repository.delete(id)
+            _deleted.postValue(response)
             listPlannedExpenseDetails()
         }
+
     }
     
 }
